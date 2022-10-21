@@ -1,6 +1,6 @@
 
 grand usage for all schemas in a  database :
-
+IR@49e841fe-7432-4954-a6a0-6aa61e9de58f@THB@ServiceEndpoint=thb.centralindia.datafactory.azure.net@AGuQkCo73wZjemLXQTERKA/jB0aFIeUHAMrPEhSqfsQ=
 do $$
 DECLARE
    v_schema name;
