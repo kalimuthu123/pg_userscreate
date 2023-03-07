@@ -1,0 +1,103 @@
+
+grand usage for all schemas in a  database :
+IR@49e841fe-7432-4954-a6a0-6aa61e9de58f@THB@ServiceEndpoint=thb.centralindia.datafactory.azure.net@AGuQkCo73wZjemLXQTERKA/jB0aFIeUHAMrPEhSqfsQ=
+
+DO
+$$DECLARE
+   v_schema name;
+BEGIN
+   FOR v_schema IN
+      SELECT nspname FROM pg_namespace
+      WHERE nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+        AND nspname NOT LIKE 'pg_temp%'
+        AND nspname NOT LIKE 'pg_toast_temp%'
+   LOOP
+      EXECUTE format(
+                 'GRANT USAGE ON SCHEMA %I TO readonly',
+                 v_schema
+              );
+   END LOOP;
+END;$$;
+
+
+
+grand SELECT on all tables in all schemas in a  database :
+
+DO
+$$DECLARE
+   v_schema name;
+BEGIN
+   FOR v_schema IN
+      SELECT nspname FROM pg_namespace
+      WHERE nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+        AND nspname NOT LIKE 'pg_temp%'
+        AND nspname NOT LIKE 'pg_toast_temp%'
+   LOOP
+      EXECUTE format(
+                 'GRANT SELECT ON ALL TABLES IN SCHEMA %I TO readonly',
+                 v_schema
+              );
+   END LOOP;
+END;$$;
+
+grand all previledges on all sequences in all schemas in a  database :
+
+
+do $$
+DECLARE
+   v_schema name;
+BEGIN
+   FOR v_schema IN
+      SELECT nspname FROM pg_namespace
+      WHERE nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+        AND nspname NOT LIKE 'pg_temp%'
+        AND nspname NOT LIKE 'pg_toast_temp%'
+   LOOP
+      EXECUTE format(
+                 'GRANT ALL PRIVILEGES ON ALL SEQUENCES  IN SCHEMA %I TO readwrite',
+                 v_schema
+              );
+   END LOOP;
+end
+$$;
+
+grand select on all future tables in all schemas in a  database :
+
+do $$
+DECLARE
+   v_schema name;
+BEGIN
+   FOR v_schema IN
+      SELECT nspname FROM pg_namespace
+      WHERE nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+        AND nspname NOT LIKE 'pg_temp%'
+        AND nspname NOT LIKE 'pg_toast_temp%'
+   LOOP
+      EXECUTE format(
+                 'ALTER DEFAULT PRIVILEGES FOR USER maxappuser_pep IN SCHEMA %I GRANT SELECT ON TABLES TO readonly',
+                 v_schema
+              );
+   END LOOP;
+end
+$$;
+
+
+grand select on all future sequence in all schemas in a  database :
+
+do $$
+DECLARE
+   v_schema name;
+BEGIN
+   FOR v_schema IN
+      SELECT nspname FROM pg_namespace
+      WHERE nspname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+        AND nspname NOT LIKE 'pg_temp%'
+        AND nspname NOT LIKE 'pg_toast_temp%'
+   LOOP
+      EXECUTE format(
+                 'ALTER DEFAULT PRIVILEGES FOR USER maxappuser_pep IN SCHEMA %I GRANT USAGE, SELECT ON SEQUENCES TO readonly',
+                 v_schema
+              );
+   END LOOP;
+end
+$$;
